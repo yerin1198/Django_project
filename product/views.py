@@ -17,11 +17,13 @@ class TestView(APIView):
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-
-    queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    queryset = Product.objects.all()
     filter_backends = [DjangoFilterBackend]
     filter_class = ProductFilter
-    filterset_fields = ['name']
+    filterset_fields = ['name', 'id']
+
+    def get_queryset(self):
+        return super().get_queryset().filter()
 
 
