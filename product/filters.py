@@ -19,9 +19,7 @@ class ProductFilter(FilterSet):
 
     class Meta:
         model = Product
-        fields = {
-            'description': ['exact', 'contains']
-        }
+        fields = ['price', 'description']
 
 
 
