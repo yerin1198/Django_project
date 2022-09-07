@@ -12,7 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 
 
 class ProductPagination(PageNumberPagination):
-    page_size = 2
+    page_size = 4
 
 
 class TestView(APIView):
@@ -26,11 +26,14 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
     filter_backends = [filters.OrderingFilter]
-    filter_class = ProductFilter
     pagination_class = ProductPagination
-    #filterset_fields = ['name', 'id']
     ordering_fields = ['price']  # 정렬 대상이 될 field 지정
-    ordering = ['id']  # Default 정렬 기준 지정
+    # ordering = ['id']  # Default 정렬 기준 지정
 
-    def get_queryset(self):
-        return super().get_queryset().filter()
+    def get_queryset(self):  # get_queryset 재정의
+        q = self.request.query_params.get('search', '')
+        qs = super().get_queryset()
+        if q:
+            qs = qs.filter(price__gt=q)
+            print(qs)
+        return qs
