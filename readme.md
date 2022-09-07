@@ -9,4 +9,4 @@
 ![Swagger](https://img.shields.io/badge/-Swagger-05122A?style=flat&logo=swagger)&nbsp;
 
 ## 주요 기능
-#### C,R,U,D, 필터링, 정렬, 
+#### C,R,U,D, 필터링, 정렬, 페
