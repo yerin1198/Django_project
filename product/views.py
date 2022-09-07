@@ -2,14 +2,10 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets
-from rest_framework import filters
 
 from product.models import Product
 from product.pagination import ProductPagination
 from product.serializers import ProductSerializer
-
-
-
 
 
 class TestView(APIView):
@@ -21,12 +17,12 @@ class TestView(APIView):
 
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by('-price', 'quantity')  # 가격 내림차순 -> 수량 오름차순 정렬
     pagination_class = ProductPagination
 
     def get_queryset(self):  # get_queryset 재정의
         q = self.request.query_params.get('search', '')
         qs = super().get_queryset()
         if q:
-            qs = qs.filter(price__gt=q).order_by('price')
+            qs = qs.filter(price__gt=q)
         return qs
