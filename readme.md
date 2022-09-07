@@ -5,4 +5,6 @@
 ###### 2022.09.07~
 
 ## 기술 스택
+![Django](https://img.shields.io/badge/-django-05122A?style=flat&logo=django)&nbsp;
+![Swagger](https://img.shields.io/badge/-Swagger-05122A?style=flat&logo=swagger)&nbsp;
 
