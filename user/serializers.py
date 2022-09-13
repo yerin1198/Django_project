@@ -40,7 +40,7 @@ class UserLoginSerializer(serializers.Serializer):
         user = authenticate(username=username, password=password)
 
         if user is None:
-            return {'email': 'None'}
+            return {'username': 'None'}
         try:
             payload = JWT_PAYLOAD_HANDLER(user)
             jwt_token = JWT_ENCODE_HANDLER(payload)
@@ -48,7 +48,7 @@ class UserLoginSerializer(serializers.Serializer):
 
         except User.DoesNotExist:
             raise serializers.ValidationError(
-                'User with given email and password does not exist'
+                'User with given username and password does not exist'
             )
         return {
             'username': user.username,
@@ -60,4 +60,4 @@ class UserLoginSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'nickname', 'introduction', 'profile_image')
+        fields = ('id', 'email', 'username', 'nickname', 'introduction', 'profile_image')
