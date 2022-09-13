@@ -6,9 +6,11 @@ from rest_auth.registration.serializers import RegisterSerializer
 from .models import User
 from rest_framework import serializers
 
+# JWT 사용 설정
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
 JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 
+# 기본 유저 모델 불러오기
 User = get_user_model()
 
 
@@ -23,7 +25,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         data_dict['nickname'] = self.validated_data.get('nickname', '')
         data_dict['introduction'] = self.validated_data.get('introduction', '')
         data_dict['profile_image'] = self.validated_data.get('profile_image', '')
-
+        # get_cleaned_data 함수에 필요한 정보를 추가적으로 입력할 수 있도록 커스터마이징
         return data_dict
 
 
@@ -36,7 +38,7 @@ class UserLoginSerializer(serializers.Serializer):
     def validate(self, data):
         username = data.get("username")
         password = data.get("password", None)
-
+        # 사용자 아이디와 비밀번호로 로그인 할 수 있도록 구현
         user = authenticate(username=username, password=password)
 
         if user is None:
@@ -52,11 +54,9 @@ class UserLoginSerializer(serializers.Serializer):
             )
         return {
             'username': user.username,
-            'token': jwt_token
+            'token': jwt_token #토큰도 함께 반환
         }
 
-
-# 사용자 정보 추출
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

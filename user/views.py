@@ -1,26 +1,22 @@
-import allauth.utils
-from django.contrib.auth import authenticate
-from django.shortcuts import render
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+
 from .serializers import UserSerializer, UserLoginSerializer, CustomRegisterSerializer
-from .models import User
 from rest_framework import generics, status
 
 # 회원가입
-@permission_classes([AllowAny])
+@permission_classes([AllowAny]) #누구나 접근 가능
 class Registration(generics.GenericAPIView):
     serializer_class = CustomRegisterSerializer
-
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid(raise_exception=True):
             return Response({"message": "Request Body Error."}, status=status.HTTP_409_CONFLICT)
 
         serializer.is_valid(raise_exception=True)
-        user = serializer.save(request) # request 필요 -> 오류 발생
+        user = serializer.save(request)
         return Response(
             {
             # get_serializer_context: serializer에 포함되어야 할 어떠한 정보의 context를 딕셔너리 형태로 리턴
