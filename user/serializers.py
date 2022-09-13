@@ -29,15 +29,15 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 # 로그인
 class UserLoginSerializer(serializers.Serializer):
-    email = serializers.CharField(max_length=100)
+    username = serializers.CharField(max_length=100)
     password = serializers.CharField(max_length=100, write_only=True)
     token = serializers.CharField(max_length=100, read_only=True)
 
     def validate(self, data):
-        email = data.get("email")
+        username = data.get("username")
         password = data.get("password", None)
 
-        user = authenticate(email=email, password=password)
+        user = authenticate(username=username, password=password)
 
         if user is None:
             return {'email': 'None'}
@@ -51,7 +51,7 @@ class UserLoginSerializer(serializers.Serializer):
                 'User with given email and password does not exist'
             )
         return {
-            'email': user.email,
+            'username': user.username,
             'token': jwt_token
         }
 
