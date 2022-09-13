@@ -21,7 +21,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-import account
+import user
 import product
 
 router = routers.DefaultRouter()
@@ -41,7 +41,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('api/', include(('product.urls', 'api'))),
     path('admin/', admin.site.urls),
-    path('user/', include('account.urls'))
+    path('user/', include('user.urls'))
 ]
 if settings.DEBUG:
     urlpatterns += [
