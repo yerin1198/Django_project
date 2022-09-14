@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'product',
     'django_filters',
     'user',
+    'order',
     'allauth',
     'allauth.account',
     'rest_auth',
@@ -141,9 +142,9 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 5,
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated', # 인증된 사용자만 접근 가능
-        'rest_framework.permissions.IsAdminUser', # 관리자만 접근 가능
         'rest_framework.permissions.AllowAny', # 누구나 접근 가능
+
+
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
