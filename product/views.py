@@ -7,7 +7,7 @@ from product.models import Product
 from product.pagination import ProductPagination
 from product.serializers import ProductSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 
 
 class TestView(APIView):
@@ -22,7 +22,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by('-price', 'quantity')  # 가격 내림차순 -> 수량 오름차순 정렬
     pagination_class = ProductPagination
     permission_classes = [IsAuthenticatedOrReadOnly]  # 권한 추가
-    authentication_classes = [BasicAuthentication, SessionAuthentication]  # 인증 추가
+    
 
     def get_queryset(self):  # get_queryset 재정의
         q = self.request.query_params.get('price', '')

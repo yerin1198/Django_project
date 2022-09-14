@@ -37,14 +37,12 @@ class Login(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        print(request.data)
         if not serializer.is_valid(raise_exception=True):
             return Response({"message": "Request Body Error."}, status=status.HTTP_409_CONFLICT)
 
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
         if user['username'] == "None":
-            print(user['username'])
             return Response({"message": "fail"}, status=status.HTTP_401_UNAUTHORIZED)
 
         return Response(
