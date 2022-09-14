@@ -39,10 +39,12 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 urlpatterns = [
-    path('api/', include(('product.urls', 'api'))),
+    path('product/', include('product.urls')),
     path('admin/', admin.site.urls),
-    path('user/', include('user.urls'))
+    path('user/', include('user.urls')),
+    path('order/', include('order.urls'))
 ]
+
 if settings.DEBUG:
     urlpatterns += [
         re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
