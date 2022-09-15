@@ -1,10 +1,14 @@
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.models import update_last_login
+from django.core import validators
+from django.utils.deconstruct import deconstructible
+from rest_framework.validators import UniqueValidator
 from rest_framework_jwt.settings import api_settings
 from rest_auth.registration.serializers import RegisterSerializer
 
 from .models import User
 from rest_framework import serializers
+from django.utils.translation import gettext
 
 # JWT 사용 설정
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
@@ -27,6 +31,35 @@ class CustomRegisterSerializer(RegisterSerializer):
         data_dict['profile_image'] = self.validated_data.get('profile_image', '')
         # get_cleaned_data 함수에 필요한 정보를 추가적으로 입력할 수 있도록 커스터마이징
         return data_dict
+
+
+@deconstructible
+class CustomASCIIUsernameValidator(validators.RegexValidator):
+    regex = r'^[\w]+$'
+    message = gettext(
+        'Please enter a valid username. You input something wrong.'
+    )
+
+
+# 아이디 중복 검사
+class UsernameUniqueCheckSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=True, min_length=3, max_length=30,
+                                     validators=[UniqueValidator(queryset=User.objects.all()),
+                                                 CustomASCIIUsernameValidator])
+
+    class Meta:
+        model = User
+        fields = ['username']
+
+
+# 이메일 중복 검사
+class EmailUniqueCheckSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(required=True,
+                                  validators=[UniqueValidator(queryset=User.objects.all())])
+
+    class Meta:
+        model = User
+        fields = ['email']
 
 
 # 로그인
@@ -54,8 +87,9 @@ class UserLoginSerializer(serializers.Serializer):
             )
         return {
             'username': user.username,
-            'token': jwt_token #토큰도 함께 반환
+            'token': jwt_token  # 토큰도 함께 반환
         }
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
